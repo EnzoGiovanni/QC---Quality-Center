@@ -11,3 +11,6 @@ Dashboard :
      - check box run "post-processing"
     - Generation Settings :
      - check box "Launch Report in Excel"
+
+
+With Query Builder add a Query parameter named "LokingFor" (exemple abcd%)
