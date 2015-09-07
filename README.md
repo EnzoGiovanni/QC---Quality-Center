@@ -1,4 +1,0 @@
-# QC---Quality-Center
-
-
-fgh
