@@ -17,3 +17,5 @@ Dashboard :
 
 
 With Query Builder add a Query parameter named "LokingFor" (exemple abcd%)
+
+Then click on Generate
