@@ -16,6 +16,6 @@ Dashboard :
      - check box "Launch Report in Excel"
 
 
-With Query Builder add a Query parameter named "LokingFor" (exemple abcd%)
+With Query Builder add a Query parameter named "LookingFor" (exemple abcd%)
 
 Then click on "Generate"
