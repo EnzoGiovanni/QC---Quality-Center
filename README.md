@@ -6,7 +6,7 @@
 Dashboard :
 
  - Add new Excel report :
-    - Query : add 2 queries named
+    - Query : With Query Builder, add 2 queries named :
      - "Defects List" query "Defects-Extraction.sql"
      - "linked" query "Defects-links-with-others-elements.sql"
     - Post-processing :
