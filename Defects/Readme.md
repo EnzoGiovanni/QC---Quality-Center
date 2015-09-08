@@ -1,6 +1,4 @@
-# QC - Quality-Center
-
-   => Extraction of project Defects
+# QC - Quality-Center => Extraction of project Defects
 
 
 Dashboard :
