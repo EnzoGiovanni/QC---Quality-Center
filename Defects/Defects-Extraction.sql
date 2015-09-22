@@ -14,12 +14,14 @@ to_char(BG_CLOSING_DATE, 'mm') As "Closed Month",
 to_char(BG_CLOSING_DATE, 'iw') As "Closed Week",
 to_char(BG_CLOSING_DATE, 'yyyy/mm/dd') As "Closed Date",
 ------------------------------------------------------------
+--BG_USER_04 As "Projet",
 BG_STATUS As "Etat",
+--BUG.BG_USER_20  As "Motif",
 BG_SEVERITY As "Gravitée",
-BG_PRIORITY As "Priority",
 BG_SUMMARY As "Résumé",
-BG_RESPONSIBLE As "Actor",
-BG_DETECTED_BY As "Author"
+------------------------------------------------------------
+BG_DETECTED_BY As "detected by",
+BG_RESPONSIBLE As "assigned to"
 ------------------------------------------------------------
 FROM BUG
 Where BG_SUMMARY Like '@LookingFor@'
