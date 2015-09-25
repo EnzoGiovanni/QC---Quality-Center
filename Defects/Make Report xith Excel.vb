@@ -3,26 +3,129 @@ Const SeptJours As Date = "06/01/1900"
 Sub QC_PostProcessing()
     Dim Trash As Variant
     
-    Trash = MoreFasterCode (True)
-
+    Trash = MoreFasterCode(True)
+    
+    
+    '/!\A SUPRIMER/!\ seulement nécessaire au developpement et aux tests
+    On Error Resume Next
+        ThisWorkbook.Sheets("ByWeek").Delete
+        ThisWorkbook.Sheets("GrphByWeek").Delete
+    On Error GoTo 0
+    
+    
     'Make
     Trash = MakeTableAnoByWeek()
     Trash = CountingDefects(2, 4)
     Trash = CountingDefects(7, 5)
+    Trash = Cumulate(4, 6)
+    Trash = Cumulate(5, 7)
+    Trash = Difference(6, 7, 8)
+    
     
     'Formating Sheet
-    FormatingSheet ("Anomalies")
-    FindAllElt("-", ActiveWorkbook.Worksheets("Anomalies").Columns(7)).Cells.ClearContents
-    FormatingSheet ("Linked")
-    Trash = FormatingSheet ("ByWeek")
+    'FormatingSheet ("Defects")
+    'FindAllElt("-", ActiveWorkbook.Worksheets("Defects").Columns(7)).Cells.ClearContents
+    'FormatingSheet ("Linked")
+    Trash = TitrateColumn()
+    Trash = FormatingSheet("ByWeek")
+    Trash = MakeGraphAnosByWeek()
     
-    Trash = MoreFasterCode (False)
+    Trash = MoreFasterCode(False)
     
 End Sub
 '====================================================================================================
-Function CountingDefects(Switch As Long, DestCol As Long)
+Function MakeGraphAnosByWeek()
 '====================================================================================================
-    Dim ShAnos As Worksheet: Set ShAnos = ThisWorkbook.Worksheets("anomalies")
+    Dim WkZone As Range
+    With ThisWorkbook.Worksheets("ByWeek")
+        Set WkZone = .Range(.Cells(1, 3), .Cells(.Cells(.Rows.Count, 1).End(xlUp).Row, 3))
+        Set WkZone = WkZone.Application.Union(WkZone, .Range(.Cells(1, 8), .Cells(.Cells(.Rows.Count, 1).End(xlUp).Row, 8)))
+    End With
+    
+    ThisWorkbook.Charts.Add().Name = "GrphByWeek"
+    
+    With ThisWorkbook.Charts("GrphByWeek")
+        .Move after:=ThisWorkbook.Sheets.Item(ThisWorkbook.Sheets.Count)
+        .Type = xlLine
+        .SetSourceData Source:=WkZone, PlotBy:=xlColumns
+    End With
+    
+    Set WkZone = Nothing
+    
+    Dim Courbes As Series: Dim TopDel As Boolean: TopDel = True
+    For Each Courbes In ThisWorkbook.Charts("GrphByWeek").SeriesCollection
+        Courbes.Format.Line.Visible = msoFalse
+        Courbes.Format.Line.Visible = msoTrue
+        Courbes.MarkerStyle = xlMarkerStyleNone
+    Next Courbes: Set Courbes = Nothing
+    
+    With ThisWorkbook.Charts("GrphByWeek")
+        .SeriesCollection("Stock open defects").Format.Line.ForeColor.RGB = RGB(0, 0, 255)
+        '.Axes(xlValue, xlPrimary).MajorUnit = 1
+        .PageSetup.CenterHeader = "&D"
+        
+        .Axes(xlValue).MajorUnit = 5
+        .Axes(xlValue).MinorUnit = 1
+        .Axes(xlValue).HasMinorGridlines = True
+        .Axes(xlCategory).HasMajorGridlines = True
+    End With
+    
+    
+    ActiveChart.SetElement (msoElementLegendTop)
+    
+
+    
+    
+End Function
+'====================================================================================================
+Function TitrateColumn()
+'====================================================================================================
+    Dim ShBW As Worksheet: Set ShBW = ThisWorkbook.Worksheets("ByWeek")
+    With ShBW
+        .Cells(1, 4).Value = "number of opened defects"
+        .Cells(1, 5).Value = "number of closed defects"
+        .Cells(1, 6).Value = "Accumulated number of open defects"
+        .Cells(1, 7).Value = "Accumulated number of close defects"
+        .Cells(1, 8).Value = "Stock open defects"
+    End With
+    Set ShBW = Nothing
+End Function
+'====================================================================================================
+Function Difference(ByRef ColSrc1 As Long, ByRef ColSrc2 As Long, ByRef ColDest As Long)
+'====================================================================================================
+    Dim ShBW As Worksheet: Set ShBW = ThisWorkbook.Worksheets("ByWeek")
+    Dim WkLst As Range
+    With ShBW
+       Set WkLst = .Range(.Cells(2, ColDest), .Cells(.Cells(.Rows.Count, 1).End(xlUp).Row, ColDest))
+    End With
+    Dim Cellule As Range
+    For Each Cellule In WkLst.Cells
+        Cellule.Value = ShBW.Cells(Cellule.Row, ColSrc1).Value - ShBW.Cells(Cellule.Row, ColSrc2).Value
+    Next Cellule: Set Cellule = Nothing
+    Set WkLst = Nothing: Set ShBW = Nothing
+End Function
+'====================================================================================================
+Function Cumulate(ByRef ColSrc As Long, ByRef ColDest As Long)
+'====================================================================================================
+    Dim ShBW As Worksheet: Set ShBW = ThisWorkbook.Worksheets("ByWeek")
+    Dim WkLst As Range
+    With ShBW
+       Set WkLst = .Range(.Cells(2, ColSrc), .Cells(.Cells(.Rows.Count, ColSrc).End(xlUp).Row, ColSrc))
+    End With
+    Dim Cellule As Range
+    For Each Cellule In WkLst.Cells
+        If Cellule.Row = 2 Then
+            ShBW.Cells(Cellule.Row, ColDest).Value = Cellule.Value
+        Else
+            ShBW.Cells(Cellule.Row, ColDest).Value = Cellule.Value + ShBW.Cells(Cellule.Row - 1, ColDest).Value
+        End If
+    Next Cellule: Set Cellule = Nothing
+    Set WkLst = Nothing: Set ShBW = Nothing
+End Function
+'====================================================================================================
+Function CountingDefects(ByRef Switch As Long, ByRef DestCol As Long)
+'====================================================================================================
+    Dim ShAnos As Worksheet: Set ShAnos = ThisWorkbook.Worksheets("Defects")
     Dim ShBW As Worksheet: Set ShBW = ThisWorkbook.Worksheets("ByWeek")
     Dim WkLst As Range
     With ShBW
@@ -32,17 +135,16 @@ Function CountingDefects(Switch As Long, DestCol As Long)
     For Each Week In WkLst
         ShBW.Cells(Week.Row, DestCol).Value = ThisWorkbook.Application.WorksheetFunction.CountIf(ShAnos.Columns(Switch), Week.Value)
     Next Week: Set Week = Nothing
-
     Set WkLst = Nothing: Set ShBW = Nothing: Set ShAnos = Nothing
 End Function
 '====================================================================================================
 Function MakeTableAnoByWeek()
 '====================================================================================================
     With ThisWorkbook.Worksheets
-        .Add(After:=.Item(.Count), Type:=xlWorksheet).Name = "ByWeek"
+        .Add(after:=.Item(.Count), Type:=xlWorksheet).Name = "ByWeek"
     End With
     Dim ShBW As Worksheet: Set ShBW = ThisWorkbook.Worksheets("ByWeek")
-    Dim ShLA As Worksheet: Set ShLA = ThisWorkbook.Worksheets("anomalies")
+    Dim ShLA As Worksheet: Set ShLA = ThisWorkbook.Worksheets("Defects")
     
     With ShBW
         .Cells(1, 1).Value = "Year"
@@ -77,7 +179,7 @@ Function MakeTableAnoByWeek()
     Set ShBW = Nothing: Set ShLA = Nothing
 End Function
 '====================================================================================================
-Function FormatingSheet(ShName As String)
+Function FormatingSheet(ByRef ShName As String)
 '====================================================================================================
     Dim Sh As Worksheet: Set Sh = ThisWorkbook.Worksheets(ShName)
     With Sh.Cells
