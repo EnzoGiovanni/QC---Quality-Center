@@ -23,9 +23,9 @@ Sub QC_PostProcessing()
     
     
     'Formating Sheet
-    'FormatingSheet ("Defects")
-    'FindAllElt("-", ActiveWorkbook.Worksheets("Defects").Columns(7)).Cells.ClearContents
-    'FormatingSheet ("Linked")
+    FormatingSheet ("Defects")
+    FindAllElt("-", ActiveWorkbook.Worksheets("Defects").Columns(7)).Cells.ClearContents
+    FormatingSheet ("Linked")
     Trash = TitrateColumn()
     Trash = FormatingSheet("ByWeek")
     Trash = MakeGraphAnosByWeek()
