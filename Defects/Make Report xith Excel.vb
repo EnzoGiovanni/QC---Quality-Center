@@ -3,27 +3,20 @@ Const SeptJours As Date = "06/01/1900"
 Sub QC_PostProcessing()
     Dim Trash As Variant
     
-    MoreFasterCode (True)
-    
-    
-    '/!\A SUPRIMER/!\ seulement nécessaire au developpement et aux tests
-    On Error Resume Next
-        ThisWorkbook.Sheets("ByWeek").Delete
-    On Error GoTo 0
-    
-    
+    Trash = MoreFasterCode (True)
+
     'Make
     Trash = MakeTableAnoByWeek()
     Trash = CountingDefects(2, 4)
     Trash = CountingDefects(7, 5)
     
     'Formating Sheet
-    'FormatingSheet ("Anomalies")
-    'FindAllElt("-", ActiveWorkbook.Worksheets("Anomalies").Columns(7)).Cells.ClearContents
-    'FormatingSheet ("Linked")
-    FormatingSheet ("ByWeek")
+    FormatingSheet ("Anomalies")
+    FindAllElt("-", ActiveWorkbook.Worksheets("Anomalies").Columns(7)).Cells.ClearContents
+    FormatingSheet ("Linked")
+    Trash = FormatingSheet ("ByWeek")
     
-    MoreFasterCode (False)
+    Trash = MoreFasterCode (False)
     
 End Sub
 '====================================================================================================
