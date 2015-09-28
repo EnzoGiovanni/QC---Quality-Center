@@ -22,7 +22,7 @@ BG_DETECTED_BY As "detected by",
 BG_RESPONSIBLE As "assigned to"
 ------------------------------------------------------------
 FROM BUG
-Where BG_SUMMARY Like '@LookingFor@'
+Where BG_SUMMARY Like '@LookingForDefects@'
 ------------------------------------------------------------
 Order By
 BG_DETECTION_DATE Asc,
