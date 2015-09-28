@@ -5,14 +5,6 @@ Sub QC_PostProcessing()
     
     Trash = MoreFasterCode(True)
     
-    
-    '/!\A SUPRIMER/!\ seulement nécessaire au developpement et aux tests
-    On Error Resume Next
-        ThisWorkbook.Sheets("ByWeek").Delete
-        ThisWorkbook.Sheets("GrphByWeek").Delete
-    On Error GoTo 0
-    
-    
     'Make
     Trash = MakeTableAnoByWeek()
     Trash = CountingDefects(2, 4)
@@ -20,7 +12,6 @@ Sub QC_PostProcessing()
     Trash = Cumulate(4, 6)
     Trash = Cumulate(5, 7)
     Trash = Difference(6, 7, 8)
-    
     
     'Formating Sheet
     FormatingSheet ("Defects")
@@ -48,11 +39,9 @@ Function MakeGraphAnosByWeek()
         .Move after:=ThisWorkbook.Sheets.Item(ThisWorkbook.Sheets.Count)
         .Type = xlLine
         .SetSourceData Source:=WkZone, PlotBy:=xlColumns
-    End With
+    End With: Set WkZone = Nothing
     
-    Set WkZone = Nothing
-    
-    Dim Courbes As Series: Dim TopDel As Boolean: TopDel = True
+    Dim Courbes As Series
     For Each Courbes In ThisWorkbook.Charts("GrphByWeek").SeriesCollection
         Courbes.Format.Line.Visible = msoFalse
         Courbes.Format.Line.Visible = msoTrue
@@ -61,20 +50,25 @@ Function MakeGraphAnosByWeek()
     
     With ThisWorkbook.Charts("GrphByWeek")
         .SeriesCollection("Stock open defects").Format.Line.ForeColor.RGB = RGB(0, 0, 255)
-        '.Axes(xlValue, xlPrimary).MajorUnit = 1
+        .SetElement (msoElementLegendTop)
         .PageSetup.CenterHeader = "&D"
         
+        'abscissa
+        .Axes(xlCategory).HasMajorGridlines = True
+        .Axes(xlCategory).MajorGridlines.Border.Color = RGB(217, 217, 217)
+        .Axes(xlCategory).HasMinorGridlines = True
+        .Axes(xlCategory).TickLabels.Font.Size = 8
+        .Axes(xlCategory).TickLabels.Orientation = 55
+        
+        'ordinates
+        .Axes(xlValue).HasMinorGridlines = True
         .Axes(xlValue).MajorUnit = 5
         .Axes(xlValue).MinorUnit = 1
-        .Axes(xlValue).HasMinorGridlines = True
-        .Axes(xlCategory).HasMajorGridlines = True
+        .Axes(xlValue).MinorGridlines.Border.Color = RGB(217, 217, 217)
+        .Axes(xlValue).TickLabels.Font.Size = 8
+        
+        .HasTitle = False
     End With
-    
-    
-    ActiveChart.SetElement (msoElementLegendTop)
-    
-
-    
     
 End Function
 '====================================================================================================
