@@ -51,6 +51,7 @@ Function MakeGraphAnosByWeek()
     With ThisWorkbook.Charts("GrphByWeek")
         .SeriesCollection("Stock open defects").Format.Line.ForeColor.RGB = RGB(0, 0, 255)
         .SetElement (msoElementLegendTop)
+        .SetElement (msoElementPrimaryCategoryAxisTitleAdjacentToAxis)
         .PageSetup.CenterHeader = "&D"
         
         'abscissa
@@ -59,6 +60,7 @@ Function MakeGraphAnosByWeek()
         .Axes(xlCategory).HasMinorGridlines = True
         .Axes(xlCategory).TickLabels.Font.Size = 8
         .Axes(xlCategory).TickLabels.Orientation = 55
+        .Axes(xlCategory, xlPrimary).AxisTitle.Text = "Year - Week Number"
         
         'ordinates
         .Axes(xlValue).HasMinorGridlines = True
