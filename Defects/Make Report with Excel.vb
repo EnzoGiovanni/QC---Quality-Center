@@ -61,6 +61,8 @@ Function MakeGraphAnosByWeek()
         .Axes(xlCategory).TickLabels.Font.Size = 8
         .Axes(xlCategory).TickLabels.Orientation = 55
         .Axes(xlCategory, xlPrimary).AxisTitle.Text = "Year - Week Number"
+        .Axes(xlCategory, xlPrimary).AxisTitle.Font.Size = 8
+        .Axes(xlCategory, xlPrimary).AxisTitle.Font.Bold = False
         
         'ordinates
         .Axes(xlValue).HasMinorGridlines = True
