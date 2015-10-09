@@ -156,7 +156,7 @@ Function MakeTableAnoByWeek()
         DateMin = .Application.WorksheetFunction.Min(.Columns(6))
         DateMax = .Application.WorksheetFunction.Max(.Columns(6), .Columns(11))
     End With
-    
+    DateMin = DateMin - SeptJours
     Dim D As Date: D = DateMin
     Dim Ligne As Long: Ligne = 2
     Do
