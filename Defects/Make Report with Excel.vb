@@ -15,7 +15,10 @@ Sub QC_PostProcessing()
     
     'Formating Sheet
     FormatingSheet ("Defects")
-    FindAllElt("-", ActiveWorkbook.Worksheets("Defects").Columns(7)).Cells.ClearContents
+    Dim ZOut As Range
+    Set ZOut = FindAllElt("-", ActiveWorkbook.Worksheets("Defects").Columns(7))
+    If Not (ZOut Is Nothing) Then ZOut.Cells.ClearContents
+    Set ZOut = Nothing
     FormatingSheet ("Linked")
     Trash = TitrateColumn()
     Trash = FormatingSheet("ByWeek")
