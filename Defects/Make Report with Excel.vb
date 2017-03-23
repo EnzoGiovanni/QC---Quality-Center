@@ -206,6 +206,9 @@ Function FormatingSheet(ByRef ShName As String)
         If .Name = "Defects" Then
             .Columns(3).TextToColumns Destination:=Range("C1"), DataType:=xlDelimited, TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=False, Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo:=xlEMDFormat, TrailingMinusNumbers:=True
             .Columns(5).TextToColumns Destination:=Range("C1"), DataType:=xlDelimited, TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=False, Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo:=xlEMDFormat, TrailingMinusNumbers:=True
+            .Columns(3).NumberFormat = "dd/mm/yyyy"
+            .Columns(5).NumberFormat = "dd/mm/yyyy"
+        
         End If
     End With
 End Function
