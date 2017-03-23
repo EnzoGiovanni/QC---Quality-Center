@@ -11,7 +11,7 @@ Sub QC_PostProcessing()
     'Make
     Trash = MakeTableAnoByWeek()
     Trash = CountingDefects(2, 4)
-    Trash = CountingDefects(7, 5)
+    Trash = CountingDefects(4, 5)
     Trash = Cumulate(4, 6)
     Trash = Cumulate(5, 7)
     Trash = Difference(6, 7, 8)
