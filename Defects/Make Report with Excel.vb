@@ -5,6 +5,9 @@ Sub QC_PostProcessing()
     
     Trash = MoreFasterCode(True)
     
+    'Formating Sheet
+    FormatingSheet ("Defects")
+    
     'Make
     Trash = MakeTableAnoByWeek()
     Trash = CountingDefects(2, 4)
@@ -14,12 +17,11 @@ Sub QC_PostProcessing()
     Trash = Difference(6, 7, 8)
     
     'Formating Sheet
-    FormatingSheet ("Defects")
     Dim ZOut As Range
     Set ZOut = FindAllElt("-", ActiveWorkbook.Worksheets("Defects").Columns(7))
     If Not (ZOut Is Nothing) Then ZOut.Cells.ClearContents
     Set ZOut = Nothing
-    FormatingSheet ("Linked")
+    'FormatingSheet ("Linked")
     Trash = TitrateColumn()
     Trash = FormatingSheet("ByWeek")
     Trash = MakeGraphAnosByWeek()
@@ -156,8 +158,8 @@ Function MakeTableAnoByWeek()
     Dim DateMin, DateMax As Date
     
     With ShLA
-        DateMin = .Application.WorksheetFunction.Min(.Columns(6))
-        DateMax = .Application.WorksheetFunction.Max(.Columns(6), .Columns(11))
+        DateMin = .Application.WorksheetFunction.Min(.Columns(3))
+        DateMax = .Application.WorksheetFunction.Max(.Columns(3), .Columns(5))
     End With
     DateMin = DateMin - SeptJours
     DateMax = DateMax + 7 - DatePart("W", DateMax, vbMonday)
@@ -198,6 +200,13 @@ Function FormatingSheet(ByRef ShName As String)
     With Sh
         .Rows(2).Select
         .Application.Windows(ThisWorkbook.Name).FreezePanes = True
+    End With
+    
+    With Sh
+        If .Name = "Defects" Then
+            .Columns(3).TextToColumns Destination:=Range("C1"), DataType:=xlDelimited, TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=False, Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo:=xlEMDFormat, TrailingMinusNumbers:=True
+            .Columns(5).TextToColumns Destination:=Range("C1"), DataType:=xlDelimited, TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=False, Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo:=xlEMDFormat, TrailingMinusNumbers:=True
+        End If
     End With
 End Function
 '====================================================================================================
