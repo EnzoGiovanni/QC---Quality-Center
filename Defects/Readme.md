@@ -22,7 +22,7 @@ Then click on "Generate"
 ===========================================================================
 
 Formules pour mettre en place un graphique de type chandelier :
-Ouverture = stock d'anomalie ouverte
-Stock max = NB ano ouvertes cumulées - NB ano fermées cumulées de la semaine précedente
-Stock min = NB ano ouvertes cumulées - NB ano fermées cumulées de la semaine suivante
-Fermeture = stock d'anomalie ouverte de la semaine suivante
+ - Ouverture = stock d'anomalie ouverte
+ - Stock max = NB ano ouvertes cumulées - NB ano fermées cumulées de la semaine précedente
+ - Stock min = NB ano ouvertes cumulées - NB ano fermées cumulées de la semaine suivante
+ - Fermeture = stock d'anomalie ouverte de la semaine suivante
